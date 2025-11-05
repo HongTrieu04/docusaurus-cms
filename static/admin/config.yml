@@ -28,13 +28,13 @@ collections:
             name: "items"
             widget: "list"
             fields:
-              # === PHẦN SỬA LỖI BẮT BUỘC CỦA BẠN ===
-              - { label: "Nhãn (Label)", name: "label", widget: "string" } # Trường này nên bắt buộc
-              - { label: "Đường dẫn (to)", name: "to", widget: "string", optional: true, hint: "Dùng cho link nội bộ, ví dụ: /blog hoặc /docs/intro" }
-              - { label: "Đường dẫn đầy đủ (href)", name: "href", widget: "string", optional: true, hint: "Dùng cho link bên ngoài, ví dụ: https://google.com" }
-              - { label: "Loại (type)", name: "type", widget: "string", optional: true, hint: "Ví dụ: 'docSidebar'" }
-              - { label: "Sidebar ID", name: "sidebarId", widget: "string", optional: true, hint: "Chỉ dùng khi Loại là 'docSidebar'" }
-              - { label: "Vị trí (position)", name: "position", widget: "select", options: ["left", "right"], default: "left", optional: true }
+              # === CẤU HÌNH THANH ĐIỀU HƯỚNG ===
+              - { label: "Nhãn (Label)", name: "label", widget: "string", hint: "Tên hiển thị trên navbar (bắt buộc)" }
+              - { label: "Đường dẫn nội bộ (to)", name: "to", widget: "string", optional: true, hint: "Link nội bộ, ví dụ: /blog, /docs/intro, /about" }
+              - { label: "Đường dẫn bên ngoài (href)", name: "href", widget: "string", optional: true, hint: "Link bên ngoài, ví dụ: https://google.com, https://facebook.com" }
+              - { label: "Loại mục (type)", name: "type", widget: "string", optional: true, hint: "Chọn loại: 'docSidebar' cho tài liệu, 'external' cho link ngoài, để trống cho link thường" }
+              - { label: "ID Sidebar", name: "sidebarId", widget: "string", optional: true, hint: "ID sidebar khi type='docSidebar'. Có sẵn: 'tutorialSidebar'. Xem sidebars.js để biết thêm ID." }
+              - { label: "Vị trí (position)", name: "position", widget: "select", options: ["left", "right"], default: "left", optional: true, hint: "Vị trí hiển thị trên navbar" }
           - label: "Tự động tạo thư mục"
             name: "auto_create_folders"
             widget: "hidden"
