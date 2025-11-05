@@ -3,57 +3,97 @@ backend:
   branch: main
   repo: "HongTrieu04/docusaurus-cms"
 
-# These lines should *not* be indented
-media_folder: "static/img/uploads" # Media files will be stored in the repo under static/images/uploads
-public_folder: "/img/uploads" # The src attribute for uploaded media will begin with /images/uploads
+# Cài đặt media, phần này đã đúng
+media_folder: "static/img/uploads"
+public_folder: "/img/uploads"
 
+# === COLLECTIONS ===
+# Chúng ta sẽ định nghĩa TẤT CẢ các collection ở đây
 collections:
-  - name: blog
-    label: "blog"
-    folder: blog
-    identifier_field: title
-    extension: md
-    widget: "list"
+
+  # --- 1. BLOG ---
+  # Cấu hình cho các bài viết trong thư mục 'blog'
+  - name: "blog"
+    label: "Bài viết (Blog)"
+    folder: "blog"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
+    identifier_field: "title" # Dùng 'title' để hiển thị tên bài viết
+    extension: "md"           # Chỉ tìm file .md (hoặc mdx nếu bạn dùng)
+    format: "frontmatter"     # Báo CMS là có frontmatter ở đầu file
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Tên file khi tạo mới
     fields:
-      - { name: title, label: Title, widget: string }
-      - { name: body, label: Body, widget: markdown }
-      - { name: slug, label: Slug, widget: string }
+      - { name: "title", label: "Tiêu đề", widget: "string" }
+      - { name: "slug", label: "Slug (Đường dẫn)", widget: "string", optional: true }
       - label: "Tags"
         name: "tags"
         widget: "list"
-      - label: "Authors"
+        optional: true
+      - label: "Tác giả (Authors)"
         name: "authors"
         widget: "list"
+        optional: true
+        # Cấu hình tác giả phức tạp này đã đúng
         fields:
           - { name: name, label: Name, widget: string }
           - { name: title, label: Title, widget: string }
           - { name: url, label: URL, widget: string }
           - { name: imageUrl, label: ImageURL, widget: string }
-  - name: docs
-    label: "docs"
-    folder: docs
-    identifier_field: title
-    extension: md
-    widget: "list"
+      - { name: "body", label: "Nội dung", widget: "markdown" } # Nội dung chính
+
+  # --- 2. DOCS (GỐC) ---
+  # Cấu hình cho các file NẰM NGAY TRONG 'docs' (như intro.md)
+  - name: "docs_root"
+    label: "Tài Liệu (Gốc)"
+    folder: "docs"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
+    identifier_field: "title"
+    # Quan trọng: Chỉ tìm file .md, BỎ QUA các thư mục con
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}" # Tên file khi tạo mới (không dùng ngày tháng cho docs)
     fields:
-      - { name: title, label: Title, widget: string }
-      - { name: body, label: Body, widget: markdown }
-      - { name: slug, label: Slug, widget: string }
-      - label: "Tags"
-        name: "tags"
-        widget: "list"
-      - label: "Authors"
-        name: "authors"
-        widget: "list"
-        fields:
-          - { name: name, label: Name, widget: string }
-          - { name: title, label: Title, widget: string }
-          - { name: url, label: URL, widget: string }
-          - { name: imageUrl, label: ImageURL, widget: string }
+      # Đây là các trường QUAN TRỌNG cho Docusaurus
+      - { name: "title", label: "Tiêu đề", widget: "string" }
+      - { name: "sidebar_label", label: "Nhãn Sidebar", widget: "string", optional: true }
+      - { name: "sidebar_position", label: "Vị trí Sidebar", widget: "number", value_type: 'int', optional: true }
+      - { name: "slug", label: "Slug (Đường dẫn)", widget: "string", optional: true }
+      - { name: "body", label: "Nội dung", widget: "markdown" }
+
+  # --- 3. DOCS (TUTORIAL BASICS) ---
+  # Cấu hình riêng cho thư mục 'docs/tutorial-basics'
+  - name: "docs_basics"
+    label: "Docs (Tutorial Basics)"
+    folder: "docs/tutorial-basics"
+    create: true
+    identifier_field: "title"
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    fields:
+      # Chúng ta dùng chung các trường Docusaurus
+      - { name: "title", label: "Tiêu đề", widget: "string" }
+      - { name: "sidebar_label", label: "Nhãn Sidebar", widget: "string", optional: true }
+      - { name: "sidebar_position", label: "Vị trí Sidebar", widget: "number", value_type: 'int', optional: true }
+      - { name: "slug", label: "Slug (Đường dẫn)", widget: "string", optional: true }
+      - { name: "body", label: "Nội dung", widget: "markdown" }
+
+  # --- 4. DOCS (TUTORIAL EXTRAS) ---
+  # Cấu hình riêng cho thư mục 'docs/tutorial-extras'
+  - name: "docs_extras"
+    label: "Docs (Tutorial Extras)"
+    folder: "docs/tutorial-extras"
+    create: true
+    identifier_field: "title"
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    fields:
+      # Chúng ta dùng chung các trường Docusaurus
+      - { name: "title", label: "Tiêu đề", widget: "string" }
+      - { name: "sidebar_label", label: "Nhãn Sidebar", widget: "string", optional: true }
+      - { name: "sidebar_position", label: "Vị trí Sidebar", widget: "number", value_type: 'int', optional: true }
+      - { name: "slug", label: "Slug (Đường dẫn)", widget: "string", optional: true }
+      - { name: "body", label: "Nội dung", widget: "markdown" }
 
 
 # # Backend: Chúng ta dùng GitHub và trỏ đến kho chứa
