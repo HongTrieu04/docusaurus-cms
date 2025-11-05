@@ -40,11 +40,4 @@ collections:
             widget: "hidden"
             default: true
 
-# Backend and other sections remain the same
-backend:
-  name: github
-  branch: main
-  repo: "HongTrieu04/docusaurus-cms"
-
-# Collections sections remain the same
 # ... (rest of the existing content continues)
