@@ -9,7 +9,6 @@ public_folder: "/img/uploads"
 # === COLLECTIONS ===
 collections:
   # --- 1. BLOG ---
-  # Collection này có vẻ đã ổn, giữ nguyên
   - name: "blog"
     label: "Bài viết (Blog)"
     folder: "blog"
@@ -36,25 +35,15 @@ collections:
       - { name: "body", label: "Nội dung", widget: "markdown" }
 
   # --- 2. DOCS (Đã gộp và dùng 'nested') ---
-  # Đây là collection duy nhất cho TẤT CẢ các tài liệu
   - name: "docs"
     label: "Tài Liệu (Docs)"
     folder: "docs"
     create: true
     extension: "md"
     format: "frontmatter"
-    slug: "{{slug}}" # Tên file khi tạo mới
-    
-    # === PHẦN GIẢI QUYẾT VẤN ĐỀ 1 & 2 ===
-    # Bật tính năng lồng nhau, CMS sẽ tự quét thư mục con
+    slug: "{{slug}}"
     nested:
-      depth: 5 # Cho phép quét sâu 5 cấp thư mục, bạn có thể tăng lên
-      
-    # === PHẦN GIẢI QUYẾT VẤN ĐỀ 3 ===
-    # Không dùng 'identifier_field: title' nữa
-    # CMS sẽ tự động dùng tên file làm tên hiển thị, không bao giờ bị trống
-    
-    # Các trường này sẽ áp dụng cho TẤT CẢ các file docs
+      depth: 5
     fields:
       - { name: "title", label: "Tiêu đề (Title)", widget: "string", optional: true }
       - { name: "sidebar_label", label: "Nhãn Sidebar", widget: "string", optional: true }
@@ -62,7 +51,29 @@ collections:
       - { name: "slug", label: "Slug (Đường dẫn)", widget: "string", optional: true }
       - { name: "body", label: "Nội dung", widget: "markdown" }
 
-      
+  # === 3. COLLECTION ĐỂ SỬA NAVBAR (MỚI) ===
+  - name: "settings"
+    label: "Cài Đặt Trang"
+    editor:
+      preview: false # Không cần xem trước cho file JSON
+    files:
+      # File đầu tiên: Navbar
+      - label: "Thanh Điều Hướng (Navbar)"
+        name: "navbar"
+        file: "data/navbar.json" # <<< Trỏ đến file JSON
+        fields:
+          - label: "Các mục trên Navbar"
+            name: "items" # <<< Khớp với key "items" trong JSON
+            widget: "list"
+            # Các trường cho mỗi item
+            fields:
+              - { label: "Nhãn (Label)", name: "label", widget: "string" }
+              - { label: "Đường dẫn (to)", name: "to", widget: "string", optional: true, hint: "Dùng cho link nội bộ, ví dụ: /blog hoặc /docs/intro" }
+              - { label: "Đường dẫn đầy đủ (href)", name: "href", widget: "string", optional: true, hint: "Dùng cho link bên ngoài, ví dụ: https://google.com" }
+              - { label: "Loại (type)", name: "type", widget: "string", optional: true, hint: "Ví dụ: 'docSidebar'" }
+              - { label: "Sidebar ID", name: "sidebarId", widget: "string", optional: true, hint: "Chỉ dùng khi Loại là 'docSidebar'" }
+              - { label: "Vị trí (position)", name: "position", widget: "select", options: ["left", "right"], default: "left", optional: true }
+
 # backend:
 #   name: github
 #   branch: main

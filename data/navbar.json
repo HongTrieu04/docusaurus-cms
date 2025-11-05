@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "label": "Tutorial",
+      "to": "/docs/intro"
+    },
+    {
+      "label": "Blog",
+      "to": "/blog"
+    },
+    {
+      "label": "Trang Test",
+      "to": "/docs/test"
+    }
+  ]
+}

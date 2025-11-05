@@ -6,7 +6,20 @@
 
 import {themes as prismThemes} from 'prism-react-renderer';
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+// === THÊM VÀO ĐẦU FILE ===
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Cách lấy __dirname trong ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Đọc file JSON đồng bộ
+const navbarDataPath = path.join(__dirname, 'data/navbar.json');
+const navbarData = JSON.parse(fs.readFileSync(navbarDataPath, 'utf8'));
+// === KẾT THÚC PHẦN THÊM VÀO ===
+
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -14,27 +27,16 @@ const config = {
   tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
 
-  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
+  // ... (giữ nguyên phần future, url, baseUrl, organizationName, ...)
   future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    v4: true,
   },
-
-  // Set the production url of your site here
   url: 'https://your-docusaurus-site.example.com',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
-
+  organizationName: 'facebook',
+  projectName: 'docusaurus',
   onBrokenLinks: 'throw',
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -47,8 +49,6 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
@@ -58,11 +58,8 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -77,7 +74,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       colorMode: {
         respectPrefersColorScheme: true,
@@ -88,22 +84,23 @@ const config = {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
         },
+        
+        // === SỬA PHẦN NÀY ===
         items: [
+          // Tải các item động từ file JSON
+          ...navbarData.items,
+          
+          // Bạn có thể giữ lại các item "cứng" mà không muốn admin sửa
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
-            position: 'left',
-            label: 'Tutorial',
-          },
-          {to: '/blog', label: 'Blog', position: 'left'},
-          {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/HongTrieu04/docusaurus-cms', // Sửa link này thành repo của BẠN
             label: 'GitHub',
             position: 'right',
           },
         ],
+        // === KẾT THÚC PHẦN SỬA ===
       },
       footer: {
+        // ... (giữ nguyên footer)
         style: 'dark',
         links: [
           {
@@ -149,6 +146,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
       },
       prism: {
+        // ... (giữ nguyên prism)
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
