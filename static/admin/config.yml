@@ -57,31 +57,81 @@ collections:
             widget: "list"
             fields:
               # === Navbar Item Configuration ===
-              - { label: "Nhãn (Label)", name: "label", widget: "string", hint: "Tên hiển thị (bắt buộc)" }
-              - { 
-                  label: "Collection Type", 
-                  name: "collectionType", 
-                  widget: "select", 
-                  options: ["docs", "blog", "custom"],
-                  default: "docs",
-                  hint: "Choose the type of content this navbar item will manage"
+              - {
+                  label: "Nhãn (Label)",
+                  name: "label",
+                  widget: "string",
+                  hint: "Tên hiển thị (bắt buộc)"
                 }
-              - { 
-                  label: "Đường dẫn nội bộ (to)", 
-                  name: "to", 
-                  widget: "string", 
-                  optional: true, 
-                  hint: "Path will be auto-generated based on collection type and label, but can be customized" 
+              - {
+                  label: "Loại liên kết",
+                  name: "linkType",
+                  widget: "select",
+                  options: [
+                    { label: "Liên kết nội bộ", value: "internal" },
+                    { label: "Liên kết ngoài", value: "external" },
+                    { label: "Sidebar tài liệu", value: "docSidebar" }
+                  ],
+                  default: "internal",
+                  hint: "Chọn loại liên kết cho mục này"
                 }
-              - { 
-                  label: "Create Folder", 
-                  name: "createFolder", 
-                  widget: "navbarFolderWidget", 
-                  hint: "Click to create/update the corresponding folder structure" 
+              - {
+                  label: "Đường dẫn nội bộ (to)",
+                  name: "to",
+                  widget: "string",
+                  required: false,
+                  hint: "Đường dẫn nội bộ (vd: /docs/intro, /blog)",
+                  pattern: ['^\/.*', 'Phải bắt đầu bằng dấu /'],
+                  condition: {
+                    field: "linkType",
+                    value: "internal"
+                  }
                 }
-              
-              # 'optional: true' đã được thêm vào đây
-              - { label: "Đường dẫn bên ngoài (href)", name: "href", widget: "string", optional: true, hint: "Ví dụ: https://google.com" }
-              - { label: "Loại mục (type)", name: "type", widget: "string", optional: true, hint: "Chọn loại: 'docSidebar' cho tài liệu, 'external' cho link ngoài, để trống cho link thường" }
-              - { label: "ID Sidebar", name: "sidebarId", widget: "string", optional: true, hint: "Chỉ dùng khi type='docSidebar'. Có sẵn: 'docs', 'blog', 'tutorialSidebar'. Xem sidebars.js để biết thêm ID." }
-              - { label: "Vị trí (position)", name: "position", widget: "select", options: ["left", "right"], default: "left", optional: true, hint: "Vị trí hiển thị trên navbar" }
+              - {
+                  label: "Đường dẫn bên ngoài (href)",
+                  name: "href",
+                  widget: "string",
+                  required: false,
+                  hint: "Đường dẫn đầy đủ (vd: https://google.com)",
+                  pattern: ['^https?:\/\/.*', 'Phải bắt đầu bằng http:// hoặc https://'],
+                  condition: {
+                    field: "linkType",
+                    value: "external"
+                  }
+                }
+              - {
+                  label: "ID Sidebar",
+                  name: "sidebarId",
+                  widget: "select",
+                  options: ["tutorialSidebar", "docs", "blog"],
+                  default: "tutorialSidebar",
+                  required: false,
+                  hint: "Chọn ID của sidebar muốn hiển thị",
+                  condition: {
+                    field: "linkType",
+                    value: "docSidebar"
+                  }
+                }
+              - {
+                  label: "Tạo thư mục",
+                  name: "createFolder",
+                  widget: "navbarFolderWidget",
+                  required: false,
+                  hint: "Nhấn để tạo/cập nhật cấu trúc thư mục tương ứng",
+                  condition: {
+                    field: "linkType",
+                    value: "internal"
+                  }
+                }
+              - {
+                  label: "Vị trí hiển thị",
+                  name: "position",
+                  widget: "select",
+                  options: [
+                    { label: "Bên trái", value: "left" },
+                    { label: "Bên phải", value: "right" }
+                  ],
+                  default: "left",
+                  required: false,
+                  hint: "Vị trí hiển thị trên thanh điều hướng"
+                }
