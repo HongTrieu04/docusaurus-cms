@@ -11,12 +11,15 @@ const config = {
   favicon: 'img/favicon.ico',
   
   // Required properties
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://mydocusaurus-cms.netlify.app',
   baseUrl: '/',
   
   future: {
     v4: true,
   },
+
+  // Static directories
+  staticDirectories: ['static', 'public'],
   
   organizationName: 'facebook',
   projectName: 'docusaurus',

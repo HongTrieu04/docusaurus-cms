@@ -2,6 +2,9 @@ backend:
   name: github
   branch: main
   repo: "HongTrieu04/docusaurus-cms"
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+  site_domain: mydocusaurus-cms.netlify.app
 
 media_folder: "static/img/uploads"
 public_folder: "/img/uploads"
