@@ -1,7 +1,7 @@
 # Backend: Chúng ta dùng GitHub và trỏ đến kho chứa
 backend:
   name: github
-  repo: "docusaurus-cms" # <<< THAY THẾ BẰNG TÊN KHO GIT CỦA BẠN
+  repo: "HongTrieu04/docusaurus-cms" # <<< THAY THẾ BẰNG TÊN KHO GIT CỦA BẠN
   branch: main # Hoặc 'master'
 
 # Nơi Decap CMS sẽ upload file (ví dụ: ảnh)
