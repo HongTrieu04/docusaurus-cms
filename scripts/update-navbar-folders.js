@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 // Paths
-const navbarPath = path.join(__dirname, 'data/navbar.json');
-const docsPath = path.join(__dirname, 'docs');
-const sidebarsPath = path.join(__dirname, 'sidebars.js');
+const navbarPath = path.join(__dirname, '..', 'data', 'navbar.json');
+const docsPath = path.join(__dirname, '..', 'docs');
+const sidebarsPath = path.join(__dirname, '..', 'sidebars.js');
 
 // Read current navbar data
 function getNavbarData() {

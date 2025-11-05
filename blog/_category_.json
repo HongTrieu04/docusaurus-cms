@@ -1,0 +1,8 @@
+{
+  "label": "Blog",
+  "position": 2,
+  "link": {
+    "type": "doc",
+    "id": "blog/2019-05-28-first-blog-post"
+  }
+}
