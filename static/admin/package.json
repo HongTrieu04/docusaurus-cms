@@ -1,0 +1,30 @@
+{
+  "name": "docusaurus-admin",
+  "version": "1.0.0",
+  "description": "Custom admin interface for Docusaurus with automatic folder creation",
+  "main": "index.js",
+  "scripts": {
+    "start": "netlify dev",
+    "build": "netlify build",
+    "serve": "netlify serve"
+  },
+  "dependencies": {
+    "netlify-cli": "^17.20.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "prop-types": "^15.8.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/preset-react": "^7.22.0",
+    "babel-loader": "^9.1.0"
+  },
+  "keywords": [
+    "docusaurus",
+    "cms",
+    "netlify",
+    "decap"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

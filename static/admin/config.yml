@@ -6,6 +6,42 @@ backend:
 media_folder: "static/img/uploads"
 public_folder: "/img/uploads"
 
+# Custom widgets
+publish_mode: editorial_workflow
+media_folder: "static/img/uploads"
+public_folder: "/img/uploads"
+
+# Widget registration
+widget:
+  - name: navbarFolderWidget
+    component: ./src/components/NavbarFolderWidget.js
+
+collections:
+  - name: "settings"
+    label: "Cài Đặt Trang"
+    editor:
+      preview: false
+    files:
+      - label: "Thanh Điều Hướng (Navbar)"
+        name: "navbar"
+        file: "data/navbar.json"
+        fields:
+          - label: "Các mục trên Navbar"
+            name: "items"
+            widget: "list"
+            fields:
+              # === PHẦN SỬA LỖI BẮT BUỘC CỦA BẠN ===
+              - { label: "Nhãn (Label)", name: "label", widget: "string" } # Trường này nên bắt buộc
+              - { label: "Đường dẫn (to)", name: "to", widget: "string", optional: true, hint: "Dùng cho link nội bộ, ví dụ: /blog hoặc /docs/intro" }
+              - { label: "Đường dẫn đầy đủ (href)", name: "href", widget: "string", optional: true, hint: "Dùng cho link bên ngoài, ví dụ: https://google.com" }
+              - { label: "Loại (type)", name: "type", widget: "string", optional: true, hint: "Ví dụ: 'docSidebar'" }
+              - { label: "Sidebar ID", name: "sidebarId", widget: "string", optional: true, hint: "Chỉ dùng khi Loại là 'docSidebar'" }
+              - { label: "Vị trí (position)", name: "position", widget: "select", options: ["left", "right"], default: "left", optional: true }
+          - label: "Tự động tạo thư mục"
+            name: "auto_create_folders"
+            widget: "navbarFolderWidget"
+            default: true
+
 # === COLLECTIONS ===
 collections:
   # --- 1. BLOG ---
@@ -55,25 +91,29 @@ collections:
   - name: "settings"
     label: "Cài Đặt Trang"
     editor:
-      preview: false # Không cần xem trước cho file JSON
+      preview: false
     files:
-      # File đầu tiên: Navbar
       - label: "Thanh Điều Hướng (Navbar)"
         name: "navbar"
-        file: "data/navbar.json" # <<< Trỏ đến file JSON
+        file: "data/navbar.json"
         fields:
           - label: "Các mục trên Navbar"
-            name: "items" # <<< Khớp với key "items" trong JSON
+            name: "items"
             widget: "list"
-            # Các trường cho mỗi item
             fields:
-              - { label: "Nhãn (Label)", name: "label", widget: "string" }
+              # === PHẦN SỬA LỖI BẮT BUỘC CỦA BẠN ===
+              - { label: "Nhãn (Label)", name: "label", widget: "string" } # Trường này nên bắt buộc
               - { label: "Đường dẫn (to)", name: "to", widget: "string", optional: true, hint: "Dùng cho link nội bộ, ví dụ: /blog hoặc /docs/intro" }
               - { label: "Đường dẫn đầy đủ (href)", name: "href", widget: "string", optional: true, hint: "Dùng cho link bên ngoài, ví dụ: https://google.com" }
               - { label: "Loại (type)", name: "type", widget: "string", optional: true, hint: "Ví dụ: 'docSidebar'" }
               - { label: "Sidebar ID", name: "sidebarId", widget: "string", optional: true, hint: "Chỉ dùng khi Loại là 'docSidebar'" }
               - { label: "Vị trí (position)", name: "position", widget: "select", options: ["left", "right"], default: "left", optional: true }
+          - label: "Tự động tạo thư mục"
+            name: "auto_create_folders"
+            widget: "hidden"
+            default: true
 
+              
 # backend:
 #   name: github
 #   branch: main
