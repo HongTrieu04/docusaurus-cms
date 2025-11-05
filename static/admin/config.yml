@@ -6,15 +6,47 @@ backend:
 media_folder: "static/img/uploads"
 public_folder: "/img/uploads"
 
-# Custom widgets
-publish_mode: editorial_workflow
-
-# Widget registration
+# === WIDGET REGISTRATION ===
 widget:
   - name: navbarFolderWidget
     component: ./src/components/NavbarFolderWidget.js
+  - name: collectionSelectWidget
+    component: ./src/components/CollectionSelectWidget.js
 
+# === COLLECTIONS ===
 collections:
+  # --- 1. BLOG ---
+  - name: "blog"
+    label: "Bài viết (Blog)"
+    folder: "blog"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { name: "title", label: "Tiêu đề", widget: "string", optional: true }
+      - { name: "slug", label: "Slug (Đường dẫn)", widget: "string", optional: true }
+      - { name: "body", label: "Nội dung", widget: "markdown" }
+
+  # --- 2. DOCS (Tự động quét nội dung bên trong) ---
+  - name: "docs"
+    label: "Tài Liệu (Docs)"
+    folder: "docs"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    # 'nested' BẬT tính năng "tự động quét thư mục con"
+    # Đây là cách CMS quét NỘI DUNG, không phải quét COLLECTIONS
+    nested:
+      depth: 5 
+    fields:
+      - { name: "title", label: "Tiêu đề (Title)", widget: "string", optional: true }
+      - { name: "sidebar_label", label: "Nhãn Sidebar", widget: "string", optional: true }
+      - { name: "sidebar_position", label: "Vị trí Sidebar", widget: "number", value_type: 'int', optional: true }
+      - { name: "body", label: "Nội dung", widget: "markdown" }
+
+  # --- 3. CÀI ĐẶT TRANG (Sửa Navbar) ---
   - name: "settings"
     label: "Cài Đặt Trang"
     editor:
@@ -22,22 +54,21 @@ collections:
     files:
       - label: "Thanh Điều Hướng (Navbar)"
         name: "navbar"
-        file: "data/navbar.json"
+        file: "data/navbar.json" # Trỏ đến file dữ liệu
         fields:
           - label: "Các mục trên Navbar"
             name: "items"
             widget: "list"
             fields:
-              # === CẤU HÌNH THANH ĐIỀU HƯỚNG ===
-              - { label: "Nhãn (Label)", name: "label", widget: "string", hint: "Tên hiển thị trên navbar (bắt buộc)" }
-              - { label: "Đường dẫn nội bộ (to)", name: "to", widget: "string", optional: true, hint: "Link nội bộ, ví dụ: /blog, /docs/intro, /about" }
-              - { label: "Đường dẫn bên ngoài (href)", name: "href", widget: "string", optional: true, hint: "Link bên ngoài, ví dụ: https://google.com, https://facebook.com" }
+              # === ĐÂY LÀ PHẦN ĐÃ SỬA CHO BẠN ===
+              - { label: "Nhãn (Label)", name: "label", widget: "string", hint: "Tên hiển thị (bắt buộc)" }
+              - { label: "Đường dẫn nội bộ (to)", name: "to", widget: "string", optional: true, hint: "Ví dụ: /blog, /docs/intro" }
+              
+              # --- Tự động quét collections ---
+              - { label: "Chọn Collection", name: "collection", widget: "collectionSelectWidget", optional: true, hint: "Chọn collection để tự động điền đường dẫn. Sau khi chọn, đường dẫn sẽ tự động điền vào ô 'Đường dẫn nội bộ'." }
+              
+              # 'optional: true' đã được thêm vào đây
+              - { label: "Đường dẫn bên ngoài (href)", name: "href", widget: "string", optional: true, hint: "Ví dụ: https://google.com" }
               - { label: "Loại mục (type)", name: "type", widget: "string", optional: true, hint: "Chọn loại: 'docSidebar' cho tài liệu, 'external' cho link ngoài, để trống cho link thường" }
-              - { label: "ID Sidebar", name: "sidebarId", widget: "string", optional: true, hint: "ID sidebar khi type='docSidebar'. Có sẵn: 'tutorialSidebar'. Xem sidebars.js để biết thêm ID." }
+              - { label: "ID Sidebar", name: "sidebarId", widget: "string", optional: true, hint: "Chỉ dùng khi type='docSidebar'. Có sẵn: 'docs', 'blog', 'tutorialSidebar'. Xem sidebars.js để biết thêm ID." }
               - { label: "Vị trí (position)", name: "position", widget: "select", options: ["left", "right"], default: "left", optional: true, hint: "Vị trí hiển thị trên navbar" }
-          - label: "Tự động tạo thư mục"
-            name: "auto_create_folders"
-            widget: "hidden"
-            default: true
-
-# ... (rest of the existing content continues)
