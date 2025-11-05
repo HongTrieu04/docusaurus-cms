@@ -4,8 +4,53 @@ const path = require('path');
 // Paths (relative to the function's execution context)
 const projectRoot = path.join(__dirname, '..', '..', '..');
 const navbarPath = path.join(projectRoot, 'data/navbar.json');
-const docsPath = path.join(projectRoot, 'docs');
-const sidebarsPath = path.join(projectRoot, 'sidebars.js');
+const collectionsConfig = {
+  docs: {
+    path: path.join(projectRoot, 'docs'),
+    indexTemplate: (label) => `---
+title: ${label}
+sidebar_label: ${label}
+sidebar_position: 1
+---
+
+# ${label}
+
+Welcome to the ${label} section. This page was automatically created.
+`,
+    categoryTemplate: (label, docId) => ({
+      label,
+      position: 1,
+      link: {
+        type: 'doc',
+        id: docId
+      }
+    })
+  },
+  blog: {
+    path: path.join(projectRoot, 'blog'),
+    indexTemplate: (label) => `---
+title: ${label}
+authors: []
+tags: []
+---
+
+# ${label}
+
+Welcome to the ${label} blog section.
+`
+  },
+  custom: {
+    path: projectRoot,
+    indexTemplate: (label) => `---
+title: ${label}
+---
+
+# ${label}
+
+This is a custom section.
+`
+  }
+};
 
 // Read current navbar data
 function getNavbarData() {
@@ -189,23 +234,108 @@ function processNavbarChanges() {
 // Netlify function handler
 exports.handler = async (event, context) => {
   try {
-    console.log('Processing navbar changes...');
-    
-    const createdFolders = processNavbarChanges();
-    
+    if (event.httpMethod === 'GET') {
+      // For GET requests, just process existing navbar changes
+      console.log('Processing navbar changes...');
+      const createdFolders = processNavbarChanges();
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'Navbar processing completed',
+          createdFolders: createdFolders
+        })
+      };
+    } else if (event.httpMethod === 'POST') {
+      // For POST requests, handle creating new folders
+      const { navbarData, action } = JSON.parse(event.body);
+      
+      if (!navbarData || !navbarData.collectionType || !navbarData.label) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ 
+            success: false, 
+            error: 'Missing required fields' 
+          })
+        };
+      }
+
+      const collectionConfig = collectionsConfig[navbarData.collectionType];
+      if (!collectionConfig) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ 
+            success: false, 
+            error: 'Invalid collection type' 
+          })
+        };
+      }
+
+      // Create the folder structure
+      const pathComponents = navbarData.to.replace(/^\/+/, '').split('/');
+      let currentPath = collectionConfig.path;
+      
+      // Create each level of the folder structure
+      for (const component of pathComponents.slice(1)) {
+        currentPath = path.join(currentPath, component);
+        if (!fs.existsSync(currentPath)) {
+          fs.mkdirSync(currentPath, { recursive: true });
+        }
+      }
+
+      // Create index file
+      const indexPath = path.join(currentPath, 'index.md');
+      if (!fs.existsSync(indexPath)) {
+        fs.writeFileSync(
+          indexPath,
+          collectionConfig.indexTemplate(navbarData.label)
+        );
+      }
+
+      // Create _category_.json if it's a docs collection
+      if (navbarData.collectionType === 'docs') {
+        const categoryPath = path.join(currentPath, '_category_.json');
+        const docId = pathComponents.slice(1).join('/') + '/index';
+        
+        if (!fs.existsSync(categoryPath)) {
+          fs.writeFileSync(
+            categoryPath,
+            JSON.stringify(
+              collectionConfig.categoryTemplate(navbarData.label, docId),
+              null,
+              2
+            )
+          );
+        }
+      }
+
+      // Update sidebars if it's a docs collection
+      if (navbarData.collectionType === 'docs') {
+        updateSidebars(pathComponents.join('/'));
+      }
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          success: true,
+          path: currentPath.replace(projectRoot, '')
+        })
+      };
+    }
+
     return {
-      statusCode: 200,
+      statusCode: 405,
       body: JSON.stringify({
-        message: 'Navbar processing completed',
-        createdFolders: createdFolders
+        success: false,
+        error: 'Method not allowed'
       })
     };
   } catch (error) {
-    console.error('Error processing navbar:', error);
+    console.error('Error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({
-        error: 'Failed to process navbar changes',
+      body: JSON.stringify({ 
+        success: false, 
+        error: 'Internal server error',
         message: error.message
       })
     };

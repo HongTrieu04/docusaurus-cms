@@ -53,12 +53,29 @@ collections:
             name: "items"
             widget: "list"
             fields:
-              # === ĐÂY LÀ PHẦN ĐÃ SỬA CHO BẠN ===
+              # === Navbar Item Configuration ===
               - { label: "Nhãn (Label)", name: "label", widget: "string", hint: "Tên hiển thị (bắt buộc)" }
-              - { label: "Đường dẫn nội bộ (to)", name: "to", widget: "string", optional: true, hint: "Ví dụ: /blog, /docs/intro" }
-              
-              # --- Tự động quét collections ---
-              # - { label: "Chọn Collection", name: "collection", widget: "collectionSelectWidget", optional: true, hint: "Chọn collection để tự động điền đường dẫn. Sau khi chọn, đường dẫn sẽ tự động điền vào ô 'Đường dẫn nội bộ'." }
+              - { 
+                  label: "Collection Type", 
+                  name: "collectionType", 
+                  widget: "select", 
+                  options: ["docs", "blog", "custom"],
+                  default: "docs",
+                  hint: "Choose the type of content this navbar item will manage"
+                }
+              - { 
+                  label: "Đường dẫn nội bộ (to)", 
+                  name: "to", 
+                  widget: "string", 
+                  optional: true, 
+                  hint: "Path will be auto-generated based on collection type and label, but can be customized" 
+                }
+              - { 
+                  label: "Create Folder", 
+                  name: "createFolder", 
+                  widget: "navbarFolderWidget", 
+                  hint: "Click to create/update the corresponding folder structure" 
+                }
               
               # 'optional: true' đã được thêm vào đây
               - { label: "Đường dẫn bên ngoài (href)", name: "href", widget: "string", optional: true, hint: "Ví dụ: https://google.com" }

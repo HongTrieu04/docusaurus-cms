@@ -39,32 +39,63 @@ class NavbarFolderWidget extends React.Component {
     }
   };
 
-  handleCreateFolder = () => {
-    const { value } = this.props;
+  handleCreateFolder = async () => {
+    const { value, onChange } = this.props;
     
-    // Trigger the folder creation process
-    fetch('/.netlify/functions/update-navbar-folders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ navbarData: value })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.createdFolders) {
-        this.setState({ createdFolders: data.createdFolders });
+    if (!value || !value.collectionType || !value.label) {
+      alert('Please fill in the required fields first (Label and Collection Type)');
+      return;
+    }
+
+    // Generate the path if not specified
+    if (!value.to) {
+      const slugifiedLabel = value.label
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+      
+      value.to = `/${value.collectionType}/${slugifiedLabel}`;
+      onChange(value);
+    }
+    
+    try {
+      const response = await fetch('/.netlify/functions/update-navbar-folders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          navbarData: value,
+          action: 'create'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        this.setState({ 
+          createdFolders: [...this.state.createdFolders, data.path],
+          status: 'success',
+          message: `Successfully created folder structure at ${data.path}`
+        });
+      } else {
+        this.setState({
+          status: 'error',
+          message: data.error || 'Failed to create folder structure'
+        });
       }
-    })
-    .catch(error => {
-      console.error('Error creating folders:', error);
-      alert('Đã xảy ra lỗi khi tạo thư mục. Vui lòng thử lại.');
-    });
+    } catch (error) {
+      console.error('Error managing folders:', error);
+      this.setState({
+        status: 'error',
+        message: 'Network error while managing folders'
+      });
+    }
   };
 
   render() {
     const { classNameWrapper, setActiveStyle, setInactiveStyle } = this.props;
-    const { showInfo, createdFolders } = this.state;
+    const { showInfo, createdFolders, status, message } = this.state;
 
     return (
       <div className={classNameWrapper}>
@@ -74,7 +105,7 @@ class NavbarFolderWidget extends React.Component {
           onMouseLeave={setInactiveStyle}
         >
           <div className="widget-header">
-            <h3>Tự động tạo thư mục tài liệu</h3>
+            <h3>Folder Management</h3>
             <button 
               type="button"
               className="info-button"
@@ -87,12 +118,31 @@ class NavbarFolderWidget extends React.Component {
           {showInfo && (
             <div className="widget-info">
               <p>
-                Khi bạn thêm một mục điều hướng mới với đường dẫn nội bộ (ví dụ: /docs/tên-mục-mới),
-                hệ thống sẽ tự động tạo một thư mục tương ứng trong thư mục docs.
+                Select a collection type and provide a label to automatically create
+                the corresponding folder structure in your Docusaurus site.
               </p>
               <p>
-                Mỗi thư mục mới sẽ chứa một file index.md mặc định và được thêm vào sidebar tự động.
+                The system will create:
+                - A folder at the specified path
+                - An index.md file with default content
+                - Proper sidebar configuration (for docs)
               </p>
+            </div>
+          )}
+
+          <div className="widget-actions">
+            <button
+              type="button"
+              className="create-button"
+              onClick={this.handleCreateFolder}
+            >
+              Create/Update Folder Structure
+            </button>
+          </div>
+
+          {status && (
+            <div className={`widget-status ${status}`}>
+              {message}
             </div>
           )}
           
