@@ -7,10 +7,6 @@
     {
       "label": "Blog",
       "to": "/blog"
-    },
-    {
-      "label": "Trang Test",
-      "to": "/docs/test"
     }
   ]
 }
