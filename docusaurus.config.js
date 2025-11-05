@@ -1,47 +1,33 @@
 // @ts-check
-// `@type` JSDoc annotations allow editor autocompletion and type checking
-// (when paired with `@ts-check`).
-// There are various equivalent ways to declare your Docusaurus config.
-// See: https://docusaurus.io/docs/api/docusaurus-config
+const navbarData = require('./data/navbar.json');
 
-import {themes as prismThemes} from 'prism-react-renderer';
-
-// === THÊM VÀO ĐẦU FILE ===
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-// Cách lấy __dirname trong ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Đọc file JSON đồng bộ
-const navbarDataPath = path.join(__dirname, 'data/navbar.json');
-const navbarData = JSON.parse(fs.readFileSync(navbarDataPath, 'utf8'));
-// === KẾT THÚC PHẦN THÊM VÀO ===
-
+// Import prismThemes from prism-react-renderer
+const { themes: prismThemes } = require('prism-react-renderer');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'My Site',
   tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
-
-  // ... (giữ nguyên phần future, url, baseUrl, organizationName, ...)
+  
+  // Required properties
+  url: 'https://your-docusaurus-site.example.com',
+  baseUrl: '/',
+  
   future: {
     v4: true,
   },
-  url: 'https://your-docusaurus-site.example.com',
-  baseUrl: '/',
+  
   organizationName: 'facebook',
   projectName: 'docusaurus',
+  
   onBrokenLinks: 'throw',
-
+  
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
   },
-
+  
   presets: [
     [
       'classic',
@@ -70,7 +56,7 @@ const config = {
       }),
     ],
   ],
-
+  
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -85,22 +71,18 @@ const config = {
           src: 'img/logo.svg',
         },
         
-        // === SỬA PHẦN NÀY ===
+        // Use the imported data
         items: [
-          // Tải các item động từ file JSON
           ...navbarData.items,
-          
-          // Bạn có thể giữ lại các item "cứng" mà không muốn admin sửa
           {
-            href: 'https://github.com/HongTrieu04/docusaurus-cms', // Sửa link này thành repo của BẠN
+            href: 'https://github.com/HongTrieu04/docusaurus-cms',
             label: 'GitHub',
             position: 'right',
           },
         ],
-        // === KẾT THÚC PHẦN SỬA ===
       },
+      
       footer: {
-        // ... (giữ nguyên footer)
         style: 'dark',
         links: [
           {
@@ -145,12 +127,13 @@ const config = {
         ],
         copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
       },
+      
       prism: {
-        // ... (giữ nguyên prism)
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
     }),
 };
 
-export default config;
+// Export the config using CommonJS
+module.exports = config;
