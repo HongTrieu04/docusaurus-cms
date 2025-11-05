@@ -65,7 +65,19 @@ function getNavbarData() {
 
 // Create folder structure for navbar item
 function createNavbarFolder(item) {
-  if (!item.to || !item.label) return null;
+  // Only process items with internal paths (to)
+  if (!item.label) return null;
+  
+  // Skip external links
+  if (item.href || item.type === 'external') return null;
+  
+  // If no path is provided but it's a docSidebar type, create a default path
+  if (!item.to && item.type === 'docSidebar') {
+    item.to = `/docs/${item.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+  }
+  
+  // Skip if still no path
+  if (!item.to) return null;
 
   // Extract path components (e.g., "/docs/tutorial-basics" -> ["docs", "tutorial-basics"])
   const pathComponents = item.to.replace(/^\/+/, '').split('/');
