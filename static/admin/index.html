@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Content Manager</title>
+  <!-- Include the Decap CMS script -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+</head>
+<body>
+  <!-- The Decap CMS root element -->
+  <div id="nc-root"></div>
+  <script>
+    // The config.yml file will be loaded by Decap CMS
+    // Ensure it is in the same directory (static/admin/config.yml)
+    window.CMS_CONFIG = {
+      "config_path": "/admin/config.yml"
+    };
+  </script>
+</body>
+</html>
