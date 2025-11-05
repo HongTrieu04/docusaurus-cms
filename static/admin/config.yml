@@ -65,7 +65,7 @@ collections:
               - { label: "Đường dẫn nội bộ (to)", name: "to", widget: "string", optional: true, hint: "Ví dụ: /blog, /docs/intro" }
               
               # --- Tự động quét collections ---
-              - { label: "Chọn Collection", name: "collection", widget: "collectionSelectWidget", optional: true, hint: "Chọn collection để tự động điền đường dẫn. Sau khi chọn, đường dẫn sẽ tự động điền vào ô 'Đường dẫn nội bộ'." }
+              # - { label: "Chọn Collection", name: "collection", widget: "collectionSelectWidget", optional: true, hint: "Chọn collection để tự động điền đường dẫn. Sau khi chọn, đường dẫn sẽ tự động điền vào ô 'Đường dẫn nội bộ'." }
               
               # 'optional: true' đã được thêm vào đây
               - { label: "Đường dẫn bên ngoài (href)", name: "href", widget: "string", optional: true, hint: "Ví dụ: https://google.com" }
