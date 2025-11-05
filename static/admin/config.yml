@@ -1,0 +1,39 @@
+# Backend: Chúng ta dùng GitHub và trỏ đến kho chứa
+backend:
+  name: github
+  repo: "docusaurus-cms" # <<< THAY THẾ BẰNG TÊN KHO GIT CỦA BẠN
+  branch: main # Hoặc 'master'
+
+# Nơi Decap CMS sẽ upload file (ví dụ: ảnh)
+media_folder: "static/img/uploads" # Đường dẫn trong kho Git
+public_folder: "/img/uploads"      # Đường dẫn hiển thị trên web
+
+# Collections: Định nghĩa các loại nội dung
+collections:
+  - name: "docs" # Tên của bộ sưu tập (đặt tùy ý)
+    label: "Tài Liệu (Docs)" # Nhãn hiển thị trên giao diện CMS
+    folder: "docs" # <<< Thư mục Docusaurus lưu tài liệu
+    create: true # Cho phép người dùng tạo file mới
+    slug: "{{slug}}" # Tên file sẽ được tạo
+
+    # Các trường (fields) mà người dùng "no-code" sẽ nhập
+    fields:
+      # Docusaurus sử dụng 'frontmatter' ở đầu mỗi file
+      - { label: "Tiêu đề (Title)", name: "title", widget: "string" }
+      - { label: "Nhãn Sidebar (Sidebar Label)", name: "sidebar_label", widget: "string", optional: true }
+      - { label: "Thứ tự Sidebar (Sidebar Position)", name: "sidebar_position", widget: "number", optional: true }
+
+      # Đây là nội dung chính của bài viết (widget: markdown)
+      - { label: "Nội dung (Body)", name: "body", widget: "markdown" }
+
+  # Bạn có thể thêm collection khác cho Blog
+  - name: "blog"
+    label: "Bài viết (Blog)"
+    folder: "blog" # <<< Thư mục Docusaurus lưu blog
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Cấu trúc tên file blog
+    fields:
+      - { label: "Tiêu đề (Title)", name: "title", widget: "string" }
+      - { label: "Tác giả (Author)", name: "author", widget: "string", optional: true }
+      - { label: "Tags", name: "tags", widget: "list", optional: true }
+      - { label: "Nội dung (Body)", name: "body", widget: "markdown" }
