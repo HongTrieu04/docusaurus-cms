@@ -2,7 +2,7 @@ backend:
   name: github
   branch: main
   repo: "HongTrieu04/docusaurus-cms"
-  base_url: https://api.netlify.com
+  base_url: https://auth.decap.co
   auth_endpoint: auth
   site_domain: mydocusaurus-cms.netlify.app
 
