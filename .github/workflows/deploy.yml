@@ -24,7 +24,9 @@ jobs:
       # Bước 3: Cài đặt các gói (dependencies)
       - name: Install Dependencies
         run: npm install
-
+        
+      - name: Clear NPM/Docusaurus Cache
+        run: npm cache clean --force
       # Bước 4: Build trang Docusaurus
       # Lệnh này sẽ tạo ra thư mục 'build'
       - name: Build Docusaurus
