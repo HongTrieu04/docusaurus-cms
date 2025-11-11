@@ -2,7 +2,7 @@ backend:
   name: github
   branch: main
   repo: "HongTrieu04/docusaurus-cms"
-  base_url: https://gateway.temporal.cloud
+  base_url: https://mydoc.eastasia.cloudapp.azure.com/auth
 
 media_folder: "static/img/uploads"
 public_folder: "/img/uploads"
