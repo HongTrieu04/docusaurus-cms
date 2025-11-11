@@ -2,7 +2,8 @@ backend:
   name: github
   branch: main
   repo: "HongTrieu04/docusaurus-cms"
-  base_url: https://mydoc.eastasia.cloudapp.azure.com/auth
+  auth_type: device 
+  app_id: Ov23liY96wzsnIMrJnb3
 
 media_folder: "static/img/uploads"
 public_folder: "/img/uploads"
