@@ -1,0 +1,43 @@
+name: Build and Deploy to Azure VM
+
+# Kích hoạt khi có push lên nhánh 'main'
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # Chạy trên một máy ảo của GitHub
+
+    steps:
+      # Bước 1: Lấy code mới nhất của bạn về
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Bước 2: Cài đặt Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Đảm bảo đúng phiên bản
+
+      # Bước 3: Cài đặt các gói (dependencies)
+      - name: Install Dependencies
+        run: npm install
+
+      # Bước 4: Build trang Docusaurus
+      # Lệnh này sẽ tạo ra thư mục 'build'
+      - name: Build Docusaurus
+        run: npm run build
+
+      # Bước 5: Copy thư mục 'build' sang Azure VM
+      - name: Deploy (Copy files) to VM
+        uses: appleboy/scp-action@v1.0.1
+        with:
+          host: ${{ secrets.VM_HOST }}      # Lấy từ GitHub Secrets
+          username: ${{ secrets.VM_USER }}   # Lấy từ GitHub Secrets
+          key: ${{ secrets.VM_SSH_KEY }}       # Lấy từ GitHub Secrets
+          port: 22
+          source: "build/"                     # Thư mục nguồn
+          target: "/var/www/my-docusaurus" # Thư mục đích trên VM
+          strip_components: 1                # Bỏ thư mục 'build' đi, chỉ copy nội dung bên trong
