@@ -36,7 +36,7 @@ jobs:
       # Bước 4: Build trang Docusaurus
       # Lệnh này sẽ tạo ra thư mục 'build'
       - name: Build Docusaurus
-        run: npm run build
+        run: npm run build -- --no-cache
 
       # Bước 5: Copy thư mục 'build' sang Azure VM
       - name: Deploy (Copy files) to VM
