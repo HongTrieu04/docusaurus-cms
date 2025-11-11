@@ -36,7 +36,7 @@ jobs:
         with:
           host: ${{ secrets.VM_HOST }}      # Lấy từ GitHub Secrets
           username: ${{ secrets.VM_USER }}   # Lấy từ GitHub Secrets
-          key: ${{ secrets.VM_SSH_KEY }}       # Lấy từ GitHub Secrets
+          key: ${{ secrets.MY_DOC }}       # Lấy từ GitHub Secrets
           port: 22
           source: "build/"                     # Thư mục nguồn
           target: "/var/www/my-docusaurus" # Thư mục đích trên VM
