@@ -27,10 +27,25 @@ jobs:
 
       - name: Clear Docusaurus Cache
         run: npm run clear
+      
       # Bước 4: Build trang Docusaurus
       # Lệnh này sẽ tạo ra thư mục 'build'
       - name: Build Docusaurus
         run: npm run build
+
+      # Bước 4.5: Verify static files are in build
+      - name: Verify static files copied to build
+        run: |
+          echo "Checking if admin folder exists in build..."
+          if [ -d "build/admin" ]; then
+            echo "✓ admin folder found in build/"
+            ls -la build/admin/
+          else
+            echo "✗ admin folder NOT found in build/"
+            echo "Copying static/admin to build/admin manually..."
+            mkdir -p build/admin
+            cp -r static/admin/* build/admin/
+          fi
 
       # Bước 5: Copy thư mục 'build' sang Azure VM
       - name: Deploy (Copy files) to VM
@@ -40,6 +55,26 @@ jobs:
           username: ${{ secrets.VM_USER }}   # Lấy từ GitHub Secrets
           key: ${{ secrets.MY_DOC }}       # Lấy từ GitHub Secrets
           port: 22
-          source: "build/"                     # Thư mục nguồn
+          source: "build/,static/admin/"    # Copy both build directory and admin config
           target: "/var/www/my-docusaurus" # Thư mục đích trên VM
           strip_components: 1                # Bỏ thư mục 'build' đi, chỉ copy nội dung bên trong
+
+      # Bước 6: Verify the config.yml file exists on the server
+      - name: Verify config.yml on server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.MY_DOC }}
+          port: 22
+          script: |
+            echo "Checking config.yml..."
+            if [ -f "/var/www/my-docusaurus/admin/config.yml" ]; then
+              echo "config.yml found:"
+              head -10 /var/www/my-docusaurus/admin/config.yml
+              echo "---"
+              echo "Checking for base_url line:"
+              grep -n "base_url" /var/www/my-docusaurus/admin/config.yml || echo "WARNING: base_url not found!"
+            else
+              echo "ERROR: config.yml not found!"
+            fi
