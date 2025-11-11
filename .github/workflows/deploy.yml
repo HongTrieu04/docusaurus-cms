@@ -25,18 +25,12 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Clean Docusaurus Cache
-        run: |
-          # Xóa cache build cũ (nếu có)
-          rm -rf build
-          # Xóa cache của Docusaurus
-          rm -rf node_modules/.cache
-          # Xóa cache npm (vẫn nên làm)
-          npm cache clean --force
+      - name: Clear Docusaurus Cache
+        run: npm run clear
       # Bước 4: Build trang Docusaurus
       # Lệnh này sẽ tạo ra thư mục 'build'
       - name: Build Docusaurus
-        run: npm run build -- --no-cache
+        run: npm run build
 
       # Bước 5: Copy thư mục 'build' sang Azure VM
       - name: Deploy (Copy files) to VM
